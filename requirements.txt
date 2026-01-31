@@ -1,12 +1,16 @@
-sentence-transformers==2.2.2
+flask
+gunicorn
+
 langchain>=0.1.0
 langchain-community
-flask
+langchain-pinecone
+langchain-openai
+
+sentence-transformers==2.2.2
+transformers==4.36.2
+huggingface-hub==0.20.3
+
+pinecone-client
 pypdf
 python-dotenv
-pinecone[grpc]
-langchain-pinecone
-langchain_community
-langchain_openai
-langchain_experimental
--e .
+chromadb
