@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medibot</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="chat-wrapper">
+    <div class="chat-card">
+
+        <!-- Header -->
+        <div class="chat-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" alt="Bot">
+            <div>
+                <h5>Medical Assistant</h5>
+                <small>Ask health questions</small>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="messageFormeight" class="chat-body"></div>
+
+        <!-- Input -->
+        <form id="messageArea" class="chat-input">
+            <input type="text" id="text" name="msg" placeholder="Type your question..." autocomplete="off" required>
+            <button type="submit" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+
+    $("#messageArea").on("submit", function(event) {
+        event.preventDefault();
+
+        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        var rawText = $("#text").val();
+
+        var userHtml = `
+        <div class="msg user">
+            ${rawText}
+            <span>${time}</span>
+        </div>`;
+
+        $("#text").val("");
+        $("#messageFormeight").append(userHtml);
+
+        $.ajax({
+            data: { msg: rawText },
+            type: "POST",
+            url: "/get",
+        }).done(function(data) {
+
+            var botHtml = `
+            <div class="msg bot">
+                ${data}
+                <span>${time}</span>
+            </div>`;
+
+            $("#messageFormeight").append(botHtml);
+            $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+        });
+    });
+
+});
+</script>
+
+</body>
+</html>
